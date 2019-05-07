@@ -3,27 +3,64 @@ package ru.suplasma;
 public class Block {
     private int width;
     private int height;
-    private int number_container;
+    private int numberContainer;
     private int x;
     private int y;
     private int number;
 
-    Block(int width, int height, int number_container, int x, int y, int number) {
-        this.width = width;
-        this.height = height;
-        this.number_container = number_container;
-        this.x = x;
-        this.y = y;
+    Block(int[] coordinats, int number) {
+        this.width = coordinats[0];
+        this.height = coordinats[1];
         this.number = number;
     }
 
-    Block(int[] block) {
-        this.width = block[0];
-        this.height = block[1];
-        this.number_container = block[2];
-        this.x = block[3];
-        this.y = block[4];
-        this.number = block[5];
+    public void setWidth(int width) {
+        this.width = width;
+
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setNumberContainer(int numberContainer) {
+        this.numberContainer = numberContainer;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getNumberContainer() {
+        return numberContainer;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     @Override
@@ -32,7 +69,7 @@ public class Block {
         int result = 1;
         result = prime * result + width;
         result = prime * result + height;
-        result = prime * result + number_container;
+        result = prime * result + numberContainer;
         result = prime * result + x;
         result = prime * result + y;
         result = prime * result + number;
@@ -52,7 +89,7 @@ public class Block {
             return false;
         if (height != other.height)
             return false;
-        if (number_container != other.number_container)
+        if (numberContainer != other.numberContainer)
             return false;
         if (x != other.x)
             return false;

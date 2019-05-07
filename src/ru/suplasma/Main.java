@@ -18,7 +18,7 @@ public class Main {
         System.out.println("Количество блоков: ");
         n = scanner.nextInt();
 
-        int[][] blocksSize = new int[n][6];
+        int[][] sizeBlock = new int[n][2];
 
         while (i < n) {
             do {
@@ -26,21 +26,19 @@ public class Main {
                 a = scanner.nextInt();
             } while (a <= 0 || a > width);
 
-            blocksSize[i][0] = a;
+            sizeBlock[i][0] = a;
 
             do {
                 System.out.println("Высота блока " + (i + 1) + ":");
                 a = scanner.nextInt();
             } while (a <= 0 || a > height);
 
-            blocksSize[i][1] = a;
-
-            blocksSize[i][5] = i++;
+            sizeBlock[i++][1] = a;
         }
 
 
         scanner.close();
 
-        new Algorithm(blocksSize, width, height);
+        new Algorithm(sizeBlock, width, height);
     }
 }
