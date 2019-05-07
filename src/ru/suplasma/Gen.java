@@ -2,8 +2,12 @@ package ru.suplasma;
 
 public class Gen {
 
-    Gen(int[][] blocksSize, int width, int height) {
+    private Pack[] packs;
 
-        new Pack(blocksSize, width, height);
+    Gen(int[][] blocksSize, int width, int height) {
+        packs = new Pack[10];
+
+        for (Pack pack : packs)
+            pack = new Pack(blocksSize, width, height);
     }
 }

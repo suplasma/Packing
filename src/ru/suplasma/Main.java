@@ -8,6 +8,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int a, i = 0, n;
 
+        int width, height;
+
+        System.out.println("Ширина контейнера: ");
+        width = scanner.nextInt();
+        System.out.println("Высота контейнера: ");
+        height = scanner.nextInt();
+
         System.out.println("Количество блоков: ");
         n = scanner.nextInt();
 
@@ -17,26 +24,19 @@ public class Main {
             do {
                 System.out.println("Ширина блока " + (i + 1) + ":");
                 a = scanner.nextInt();
-            } while (a <= 0);
+            } while (a <= 0 || a > width);
 
             blocksSize[i][0] = a;
 
             do {
                 System.out.println("Высота блока " + (i + 1) + ":");
                 a = scanner.nextInt();
-            } while (a <= 0);
+            } while (a <= 0 || a > height);
 
             blocksSize[i][1] = a;
 
             blocksSize[i][5] = i++;
         }
-
-        int width, height;
-
-        System.out.println("Ширина контейнера: ");
-        width = scanner.nextInt();
-        System.out.println("Высота контейнера: ");
-        height = scanner.nextInt();
 
 
         scanner.close();
