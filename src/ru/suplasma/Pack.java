@@ -16,7 +16,7 @@ public class Pack {
         containers = new LinkedList<>();
 
         blocks = new Block[sizeBlock.length];
-        for(int i=0;i<sizeBlock.length;i++)
+        for (int i = 0; i < sizeBlock.length; i++)
             blocks[i] = new Block(sizeBlock[i], i);
 
         numberContainer = 0;
@@ -37,7 +37,7 @@ public class Pack {
     }
 
     private void blockPlacement() {
-        random = new Random();
+        random = new Random(12304142);
         int numberCont = 0, numberBlock, count = 0;
         numberBlock = random.nextInt(blocks.length); //взять случайный блок
         while (count < blocks.length) { //пока все блоки не будут размещены
@@ -63,8 +63,8 @@ public class Pack {
                     if (block.getNumberContainer() == i) {
                         switch (random.nextInt(3)) {
                             case 0: { //переместить в новый контейнер
-                                containers.add(new Container(width, height, numberContainer++));
-                                block.setNumberContainer(numberContainer);
+                                containers.add(new Container(width, height, numberContainer));
+                                block.setNumberContainer(numberContainer++);
                                 block.setX(random.nextInt(width - block.getWidth() + 1));
                                 block.setY(random.nextInt(height - block.getHeight() + 1));
 
@@ -98,18 +98,43 @@ public class Pack {
     }
 
     void print() {
-//        while (containers.size() != 0)
-//            containers.remove(0);
-//
-//        for (int i = 0; i < numberContainer; i++)
-//            containers.add(new Container(width, height, i));
-
-        for(Container container:containers){
-            container.renull();
-            container.passedTheTest(blocks);
+       //обновление контейнеров
+        containers = new LinkedList<>();
+        numberContainer = 0;
+        for (int i = 0; i < blocks.length; i++) {
+            while (blocks[i].getNumberContainer() >= containers.size())
+                containers.add(new Container(width, height, numberContainer++));
         }
-
         for (Container container : containers)
             container.print(blocks);
+    }
+
+    int fitness() {
+        return numberContainer;
+    }
+
+    Block[] get() {
+        return blocks;
+    }
+
+    void set(Block[] blocks) {
+        this.blocks = blocks;
+    }
+
+    void cross(Pack[] packs, int n) {
+        int r = random.nextInt(packs.length - n);
+        int r1 = random.nextInt(packs.length - n);
+
+        for (int i = 0; i < blocks.length; i++)
+            if (random.nextInt(2) == 0)
+                blocks[i] = packs[r].blocks[i];
+            else
+                blocks[i] = packs[r1].blocks[i];
+
+        r = random.nextInt(blocks.length);
+
+        blocks[r].setNumberContainer(random.nextInt(numberContainer));
+        blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
+        blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
     }
 }
