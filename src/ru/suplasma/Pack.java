@@ -36,6 +36,33 @@ public class Pack {
         print();
     }
 
+    Pack(int[][] sizeBlock, int width, int height, Block[] genom) {
+        containers = new LinkedList<>();
+
+        blocks = new Block[sizeBlock.length];
+        for (int i = 0; i < blocks.length; i++)
+            blocks[i] = genom[i];
+
+        for (int i = 0; i < sizeBlock.length; i++)
+            blocks[i] = new Block(sizeBlock[i], i);
+
+        numberContainer = 0;
+        this.width = width;
+        this.height = height;
+
+        blockPlacement(); //размещение блоков
+
+
+        //создание контейнеров
+        for (int i = 0; i < blocks.length; i++) {
+            while (blocks[i].getNumberContainer() >= containers.size())
+                containers.add(new Container(width, height, numberContainer++));
+        }
+
+        check(); //проверка контейнеров
+        print();
+    }
+
     private void blockPlacement() {
         random = new Random();
         int numberCont = 0, numberBlock, count = 0;
@@ -68,7 +95,7 @@ public class Pack {
                                 block.setX(random.nextInt(width - block.getWidth() + 1));
                                 block.setY(random.nextInt(height - block.getHeight() + 1));
 
-                                System.out.println("Создан новый контейнер");
+                                //System.out.print("\nСоздан новый контейнер");
 
                                 break;
                             }
@@ -77,7 +104,7 @@ public class Pack {
                                 block.setX(random.nextInt(width - block.getWidth() + 1));
                                 block.setY(random.nextInt(height - block.getHeight() + 1));
 
-                                System.out.println("Перемещен в другой контейнер");
+                                //System.out.print("\nПеремещен в другой контейнер");
 
                                 i--;//проверить еще раз
 
@@ -87,7 +114,7 @@ public class Pack {
                                 block.setX(random.nextInt(width - block.getWidth() + 1));
                                 block.setY(random.nextInt(height - block.getHeight() + 1));
 
-                                System.out.println("Передвинут");
+                                //System.out.print("\nПередвинут");
 
                                 i--;//проверить еще раз
 

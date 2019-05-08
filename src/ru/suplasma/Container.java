@@ -34,11 +34,11 @@ public class Container {
         }
 
         if (!isEmpty()) {
-            System.out.println();
+ //           System.out.println();
             for (int[] coord : size) {
-                for (int c : coord)
-                    System.out.print(c);
-                System.out.println();
+//                for (int c : coord)
+//                    System.out.print(c);
+//                System.out.println();
             }
             return true;
         }
