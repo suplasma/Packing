@@ -37,7 +37,7 @@ public class Pack {
     }
 
     private void blockPlacement() {
-        random = new Random(12304142);
+        random = new Random();
         int numberCont = 0, numberBlock, count = 0;
         numberBlock = random.nextInt(blocks.length); //взять случайный блок
         while (count < blocks.length) { //пока все блоки не будут размещены
@@ -98,15 +98,17 @@ public class Pack {
     }
 
     void print() {
-       //обновление контейнеров
+        //обновление контейнеров
         containers = new LinkedList<>();
         numberContainer = 0;
         for (int i = 0; i < blocks.length; i++) {
             while (blocks[i].getNumberContainer() >= containers.size())
                 containers.add(new Container(width, height, numberContainer++));
         }
+        numberContainer = 0;
         for (Container container : containers)
-            container.print(blocks);
+            if (container.print(blocks))
+                numberContainer++;
     }
 
     int fitness() {

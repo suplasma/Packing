@@ -18,6 +18,7 @@ public class Gen {
             for (int i = 0; i < 10; i++) {
                 System.out.print("\n" + (i + 1) + " ген");
                 packs[i] = new Pack(sizeBlock, width, height);
+                System.out.println("Fitness: " + packs[i].fitness());
                 for (int t = 0; t < 5; t++)
                     if (min[t] > packs[i].fitness()) {
                         for (int j = 4; j > t; j--)
@@ -26,6 +27,8 @@ public class Gen {
                         break;
                     }
             }
+
+            //System.out.println("Min fitness: " + min[0]);
 
             int j = 0;
             for (int i = 0; i < 10; i++)
