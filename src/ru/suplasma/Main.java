@@ -11,26 +11,31 @@ public class Main {
         int width, height;
 
         System.out.println("Ширина контейнера: ");
-        width = scanner.nextInt();
+        //width = scanner.nextInt();
+        width = 15;
         System.out.println("Высота контейнера: ");
-        height = scanner.nextInt();
+        // height = scanner.nextInt();
+        height = 15;
 
         System.out.println("Количество блоков: ");
-        n = scanner.nextInt();
+        //n = scanner.nextInt();
+        n = 50;
 
         int[][] sizeBlock = new int[n][2];
 
         while (i < n) {
             do {
                 System.out.println("Ширина блока " + (i + 1) + ":");
-                a = scanner.nextInt();
+                //a = scanner.nextInt();
+                a = 7;
             } while (a <= 0 || a > width);
 
             sizeBlock[i][0] = a;
 
             do {
                 System.out.println("Высота блока " + (i + 1) + ":");
-                a = scanner.nextInt();
+                //a = scanner.nextInt();
+                a = 6;
             } while (a <= 0 || a > height);
 
             sizeBlock[i++][1] = a;

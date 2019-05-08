@@ -33,7 +33,7 @@ public class Pack {
         }
 
         check(); //проверка контейнеров
-        print();
+        recont();
     }
 
     Pack(int[][] sizeBlock, int width, int height, Block[] genom) {
@@ -60,7 +60,7 @@ public class Pack {
         }
 
         check(); //проверка контейнеров
-        print();
+        recont();
     }
 
     private void blockPlacement() {
@@ -124,7 +124,7 @@ public class Pack {
                     }
     }
 
-    void print() {
+    void recont() {
         //обновление контейнеров
         containers = new LinkedList<>();
         numberContainer = 0;
@@ -134,8 +134,13 @@ public class Pack {
         }
         numberContainer = 0;
         for (Container container : containers)
-            if (container.print(blocks))
+            if (container.recont(blocks))
                 numberContainer++;
+    }
+
+    void print(){
+        for (Container container : containers)
+            container.print();
     }
 
     int fitness() {
@@ -159,11 +164,15 @@ public class Pack {
                 blocks[i] = packs[r].blocks[i];
             else
                 blocks[i] = packs[r1].blocks[i];
+    }
 
-        r = random.nextInt(blocks.length);
+    void mutation(){
+        int r = random.nextInt(blocks.length);
 
-        blocks[r].setNumberContainer(random.nextInt(numberContainer));
-        blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
-        blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
+        if (random.nextInt(10) == 0) {
+            blocks[r].setNumberContainer(random.nextInt(numberContainer));
+            blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
+            blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
+        }
     }
 }

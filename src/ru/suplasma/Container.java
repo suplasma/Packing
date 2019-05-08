@@ -23,7 +23,7 @@ public class Container {
         return true;
     }
 
-    boolean print(Block[] blocks) {
+    boolean recont(Block[] blocks) {
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i].getNumberContainer() == number) {
                 for (int w = 0; w < blocks[i].getWidth(); w++)
@@ -33,17 +33,19 @@ public class Container {
             }
         }
 
-        if (!isEmpty()) {
- //           System.out.println();
-            for (int[] coord : size) {
-//                for (int c : coord)
-//                    System.out.print(c);
-//                System.out.println();
-            }
-            return true;
-        }
+        return !isEmpty();
+    }
 
-        return false;
+    void print() {
+        if (isEmpty())
+            return;
+
+        System.out.println();
+        for (int[] coord : size) {
+            for (int c : coord)
+                System.out.print(c);
+            System.out.println();
+        }
     }
 
     boolean isEmpty() {
