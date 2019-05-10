@@ -13,18 +13,19 @@ public class Pack {
     private Random random;
 
     Pack(int[][] sizeBlock, int width, int height) {
-        containers = new LinkedList<>();
-
         blocks = new Block[sizeBlock.length];
+
         for (int i = 0; i < sizeBlock.length; i++)
             blocks[i] = new Block(sizeBlock[i], i);
 
-        numberContainer = 0;
+
         this.width = width;
         this.height = height;
+        containers = new LinkedList<>();
 
-        blockPlacement(); //размещение блоков
+        numberContainer = 0;
 
+        blockPlacement(0); //размещение блоков
 
         //создание контейнеров
         for (int i = 0; i < blocks.length; i++) {
@@ -33,25 +34,21 @@ public class Pack {
         }
 
         check(); //проверка контейнеров
-        recont();
+
+        start();
     }
 
-    Pack(int[][] sizeBlock, int width, int height, Block[] genom) {
-        containers = new LinkedList<>();
-
+    Pack(int[][] sizeBlock, int width, int height, Block[] genome) {
         blocks = new Block[sizeBlock.length];
-        for (int i = 0; i < blocks.length; i++)
-            blocks[i] = genom[i];
 
-        for (int i = 0; i < sizeBlock.length; i++)
-            blocks[i] = new Block(sizeBlock[i], i);
+        set(genome);
 
-        numberContainer = 0;
+
         this.width = width;
         this.height = height;
+        containers = new LinkedList<>();
 
-        blockPlacement(); //размещение блоков
-
+        blockPlacement(blocks.length); //размещение блоков
 
         //создание контейнеров
         for (int i = 0; i < blocks.length; i++) {
@@ -59,13 +56,17 @@ public class Pack {
                 containers.add(new Container(width, height, numberContainer++));
         }
 
-        check(); //проверка контейнеров
-        recont();
+        start();
     }
 
-    private void blockPlacement() {
+    private void start() {
+
+        recont(); //обновить расположение блоков в контейнере
+    }
+
+    private void blockPlacement(int number) {
         random = new Random();
-        int numberCont = 0, numberBlock, count = 0;
+        int numberCont = 0, numberBlock, count = number;
         numberBlock = random.nextInt(blocks.length); //взять случайный блок
         while (count < blocks.length) { //пока все блоки не будут размещены
             if (blocks[numberBlock].getNumberContainer() != 0) { //если блок уже размещен
@@ -138,7 +139,7 @@ public class Pack {
                 numberContainer++;
     }
 
-    void print(){
+    void print() {
         for (Container container : containers)
             container.print();
     }
@@ -166,10 +167,8 @@ public class Pack {
                 blocks[i] = packs[r1].blocks[i];
     }
 
-    void mutation(){
-        int r = random.nextInt(blocks.length);
-
-        if (random.nextInt(10) == 0) {
+    void mutation() {
+        for (int r = 0; r < blocks.length; r++) {
             blocks[r].setNumberContainer(random.nextInt(numberContainer));
             blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
             blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
