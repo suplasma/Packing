@@ -1,7 +1,12 @@
 package ru.suplasma;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Pack {
     private LinkedList<Integer> containers;
@@ -57,8 +62,8 @@ public class Pack {
             while (blocks[i].getNumberContainer() > containers.size())
                 containers.add(0);
         }
-        if (containers.size() < 37)
-            print();
+//        if (containers.size() < 37)
+//            print();
         int max = 0;
         for (int i = 0; i < blocks.length; i++)
             if (blocks[i].getNumberContainer() > max)
@@ -177,15 +182,15 @@ public class Pack {
     }
 
     int fitness() {
-//        int max = 0;
-//        for (int i = 0; i < blocks.length; i++)
-//            if (blocks[i].getNumberContainer() > max)
-//                max = blocks[i].getNumberContainer();
+        int max = 0;
+        for (int i = 0; i < blocks.length; i++)
+            if (blocks[i].getNumberContainer() > max)
+                max = blocks[i].getNumberContainer();
 //        while (max > containers.size())
 //            containers.add(0);
 //        while (max < containers.size())
 //            remove();
-        return containers.size();
+        return max;
     }
 
     int[][] get() {
@@ -215,5 +220,44 @@ public class Pack {
             blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
             blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
         }
+    }
+
+    int write() {
+        try {
+            FileWriter fw = new FileWriter("weights.txt");
+            for (int j = 0; j < blocks.length; j++)
+                fw.write(blocks[j].getNumber() + " " + blocks[j].getNumberContainer() + "\n");
+
+            File file = new File("weights.txt");
+            if (!file.exists()) {
+                System.out.println("Ошибка создания файла");
+                return 1;
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 2;
+        }
+        return 0;
+    }
+
+    private int readWeights() {
+        try {
+            File file = new File("weights.txt");
+            if (!file.exists()) {
+                System.out.println("Ошибка, файла не существует");
+                return 1;
+            }
+
+            FileReader fr = new FileReader("weights.txt");
+            Scanner scan = new Scanner(fr);
+//            for (int j = 0; j < W.size(); j++)
+//                for (int i = 0; i < W.get(j).length; i++)
+//                    W.get(j)[i][0] = Double.parseDouble(scan.nextLine());
+            fr.close();
+        } catch (Exception e) {
+            return 2;
+        }
+        return 0;
     }
 }
