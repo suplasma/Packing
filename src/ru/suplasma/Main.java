@@ -44,6 +44,6 @@ public class Main {
 
         scanner.close();
 
-        new Algorithm(sizeBlock, width, height);
+        new Gen(sizeBlock, width, height, 1, 1, 1);
     }
 }

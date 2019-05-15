@@ -14,15 +14,6 @@ public class Block {
         this.number = number;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public void setNumberContainer(int numberContainer) {
         this.numberContainer = numberContainer;
     }
@@ -33,10 +24,6 @@ public class Block {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public int getWidth() {
@@ -63,40 +50,15 @@ public class Block {
         return number;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + width;
-        result = prime * result + height;
-        result = prime * result + numberContainer;
-        result = prime * result + x;
-        result = prime * result + y;
-        result = prime * result + number;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean check(Block block) {
+        if (block.getX() > x + width && block.getX() + block.getX() > x + width)
             return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Block other = (Block) obj;
-        if (width != other.width)
-            return false;
-        if (height != other.height)
-            return false;
-        if (numberContainer != other.numberContainer)
-            return false;
-        if (x != other.x)
-            return false;
-        if (y != other.y)
-            return false;
-        if (number != other.number)
-            return false;
-        return true;
+        if (block.getX() < x && block.getX() + block.getX() < x)
+            return true;
+        if (block.getY() > y + height && block.getY() + block.getY() > y + height)
+            return true;
+        if (block.getY() < y && block.getY() + block.getY() < y)
+            return true;
+        return false;
     }
 }

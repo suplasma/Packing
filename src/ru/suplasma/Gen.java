@@ -10,12 +10,8 @@ public class Gen {
         int min[] = new int[remainingAmount];
         int mini[] = new int[min.length];
 
-        Block[] blocks;
-        int j, n;
-
         for (int i = 0; i < packs.length; i++)
-            packs[i] = new Pack(sizeBlock, width, height);
-
+            packs[i] = new Pack(sizeBlock, width, height, null);
 
         for (int k = 0; k < populations; k++) {
             System.out.println("--------------------------" + (k + 1) + " популяция-------------------------");
@@ -23,16 +19,13 @@ public class Gen {
             for (int i = 0; i < min.length; i++)
                 min[i] = Integer.MAX_VALUE;
 
-
             for (int i = 0; i < packs.length; i++) {
                 System.out.println((i + 1) + " ген");
-
-                //packs[i].set(genome[i]);
 
                 System.out.println("Fitness: " + packs[i].fitness());
                 for (int t = 0; t < min.length; t++)
                     if (min[t] > packs[i].fitness()) {
-                        for (j = min.length - 1; j > t; j--) {
+                        for (int j = min.length - 1; j > t; j--) {
                             min[j] = min[j - 1];
                             mini[j] = mini[j - 1];
                         }
@@ -49,33 +42,16 @@ public class Gen {
 
             System.out.println("Min fitness: " + min[0]);
 
-            blocks = null;
-            j = 0;
-
-
             for (int i = 0; i < packs.length; i++) {
-                packs[i].cross(packs,0);
+                packs[i].cross(packs, 0);
                 packs[i].mutation();
                 genome[i] = packs[i].get();
-                packs[i]= new Pack(sizeBlock, width, height,genome[i]);
-                //packs[i].set(genome[i]);
+                packs[i] = new Pack(sizeBlock, width, height, genome[i]);
             }
-
-//            for (int i = 0; i < packs.length; i++) {
-//                packs[i] = new Pack(sizeBlock, width, height);
-//                packs[i].set(genome[i]);
-//            }
-
-//            n = j;
-//
-//            for (; j < packs.length; j++) {
-//                packs[j].cross(packs, n);
-//                packs[j].mutation();
-//                genome[j] = packs[j].get();
-//            }
         }
 
-        //gene.print();
+        System.out.println("Gen");
+        gene.print();
         System.out.println("Result: " + fitness);
     }
 }

@@ -1,64 +1,45 @@
 package ru.suplasma;
 
 public class Container {
-    private int[][] size;
-    private int number;
 
-    Container(int width, int height, int number) {
-        size = new int[width][height];
-        this.number = number;
-    }
-
-    boolean passedTheTest(Block[] blocks) {
+    static boolean passedTheTest(Block[] blocks, int number, int width, int height) {
+        boolean[][] size = new boolean[width][height];
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i].getNumberContainer() == number) {
                 for (int w = 0; w < blocks[i].getWidth(); w++)
                     for (int h = 0; h < blocks[i].getHeight(); h++) {
-                        if (size[w + blocks[i].getX()][h + blocks[i].getY()] != 0)
+                        if (size[w + blocks[i].getX()][h + blocks[i].getY()])
                             return false;
-                        size[w + blocks[i].getX()][h + blocks[i].getY()] = blocks[i].getNumber() + 1;
+                        size[w + blocks[i].getX()][h + blocks[i].getY()] = true;
                     }
             }
         }
         return true;
     }
 
-    boolean recont(Block[] blocks) {
+    static void print(Block[] blocks, int number, int width, int height) {
+        int[][] size = new int[width][height];
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i].getNumberContainer() == number) {
                 for (int w = 0; w < blocks[i].getWidth(); w++)
                     for (int h = 0; h < blocks[i].getHeight(); h++) {
-                        size[w + blocks[i].getX()][h + blocks[i].getY()] = blocks[i].getNumber() + 1;
+                        size[w + blocks[i].getX()][h + blocks[i].getY()] = blocks[i].getNumber();
                     }
             }
         }
-
-        return !isEmpty();
-    }
-
-    void print() {
-        if (isEmpty())
-            return;
 
         System.out.println();
         for (int[] coord : size) {
             for (int c : coord)
-                System.out.print(c);
+                System.out.print("\t" + c);
             System.out.println();
         }
     }
 
-    boolean isEmpty() {
-        for (int[] coord : size)
-            for (int c : coord)
-                if (c != 0)
-                    return false;
+    static boolean isEmpty(Block[] blocks, int number) {
+        for (Block block : blocks)
+            if (block.getNumberContainer() == number)
+                return false;
         return true;
-    }
-
-    void renull() {
-        for (int[] w : size)
-            for (int h : w)
-                h = 0;
     }
 }
