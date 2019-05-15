@@ -9,25 +9,28 @@ public class Pack {
     private int width;
     private int height;
 
-    private int containersSize;
     private Random random;
 
-    Pack(int[][] sizeBlock, int width, int height, Block[] genome) {
+    Pack(int[][] sizeBlock, int width, int height, int[][] genome) {
         this.width = width;
         this.height = height;
         containers = new LinkedList<>();
 
         random = new Random();
+        blocks = new Block[sizeBlock.length];
+        for (int i = 0; i < sizeBlock.length; i++)
+            blocks[i] = new Block(sizeBlock[i], i + 1);
         if (genome == null) {
-            blocks = new Block[sizeBlock.length];
 
-            for (int i = 0; i < sizeBlock.length; i++)
-                blocks[i] = new Block(sizeBlock[i], i + 1);
 
             blockPlacement(); //размещение блоков
 
         } else
-            this.blocks = genome;
+            for (int i = 0; i < blocks.length; i++) {
+                blocks[i].setNumberContainer(genome[i][0]);
+                blocks[i].setX(genome[i][1]);
+                blocks[i].setY(genome[i][2]);
+            }
 
         start();
     }
@@ -54,7 +57,14 @@ public class Pack {
             while (blocks[i].getNumberContainer() > containers.size())
                 containers.add(0);
         }
-        print();
+        if (containers.size() < 37)
+            print();
+        int max = 0;
+        for (int i = 0; i < blocks.length; i++)
+            if (blocks[i].getNumberContainer() > max)
+                max = blocks[i].getNumberContainer();
+        if (max != containers.size())
+            System.out.println(1 / 0);
 
     }
 
@@ -167,11 +177,25 @@ public class Pack {
     }
 
     int fitness() {
+//        int max = 0;
+//        for (int i = 0; i < blocks.length; i++)
+//            if (blocks[i].getNumberContainer() > max)
+//                max = blocks[i].getNumberContainer();
+//        while (max > containers.size())
+//            containers.add(0);
+//        while (max < containers.size())
+//            remove();
         return containers.size();
     }
 
-    Block[] get() {
-        return blocks;
+    int[][] get() {
+        int[][] gen = new int[blocks.length][3];
+        for (int i = 0; i < blocks.length; i++) {
+            gen[i][0] = blocks[i].getNumberContainer();
+            gen[i][1] = blocks[i].getX();
+            gen[i][2] = blocks[i].getY();
+        }
+        return gen;
     }
 
     void cross(Pack[] packs, int n) {

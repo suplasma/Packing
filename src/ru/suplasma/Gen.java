@@ -4,9 +4,9 @@ public class Gen {
 
     Gen(int[][] sizeBlock, int width, int height, int numberOfGenes, int remainingAmount, int populations) {
         Pack[] packs = new Pack[numberOfGenes];
-        Block[][] genome = new Block[packs.length][sizeBlock.length];
+        int[][] genome;
         int fitness = Integer.MAX_VALUE;
-        Pack gene = null;
+        int[][] gene = null;
         int min[] = new int[remainingAmount];
         int mini[] = new int[min.length];
 
@@ -37,7 +37,8 @@ public class Gen {
 
             if (fitness > min[0]) {
                 fitness = min[0];
-                gene = packs[mini[0]];
+                gene = packs[mini[0]].get();
+                packs[mini[0]].write();
             }
 
             System.out.println("Min fitness: " + min[0]);
@@ -45,13 +46,29 @@ public class Gen {
             for (int i = 0; i < packs.length; i++) {
                 packs[i].cross(packs, 0);
                 packs[i].mutation();
-                genome[i] = packs[i].get();
-                packs[i] = new Pack(sizeBlock, width, height, genome[i]);
+                genome = packs[i].get();
+                packs[i] = new Pack(sizeBlock, width, height, genome);
             }
         }
 
         System.out.println("Gen");
-        gene.print();
+//        packs[0]=new Pack(sizeBlock,width,height,gene);
+//        packs[0].print();
+        Block[] blocks = new Block[sizeBlock.length];
+        for (int i = 0; i < blocks.length; i++) {
+            blocks[i] = new Block(sizeBlock[i], i);
+            blocks[i].setNumberContainer(gene[i][0]);
+            blocks[i].setX(gene[i][1]);
+            blocks[i].setY(gene[i][2]);
+        }
+        for (int i = 0; i < fitness; i++) {
+            System.out.println(i + 1 + "Контейнер");
+            Container.print(blocks, i + 1, width, height);
+            System.out.println();
+        }
+        System.out.println("\n\n");
+        for (Block block : blocks)
+            System.out.println(block.getNumber() + " " + block.getNumberContainer());
         System.out.println("Result: " + fitness);
     }
 }
