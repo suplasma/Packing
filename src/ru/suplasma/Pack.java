@@ -3,11 +3,9 @@ package ru.suplasma;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Random;
 
 public class Pack {
-    private LinkedList<Integer> containers;
     private Block[] blocks;
     private int width;
     private int height;
@@ -17,7 +15,6 @@ public class Pack {
     Pack(int[][] sizeBlock, int width, int height, int[][] genome) {
         this.width = width;
         this.height = height;
-        containers = new LinkedList<>();
 
         random = new Random();
         blocks = new Block[sizeBlock.length];
@@ -39,31 +36,13 @@ public class Pack {
     }
 
     private void start() {
-        //создание контейнеров
-        for (int i = 0; i < blocks.length; i++) {
-            while (blocks[i].getNumberContainer() > containers.size())
-                containers.add(0);
-        }
-
-
         check(); //проверка контейнеров
-        for (int i = 0; i < blocks.length; i++) {
-            while (blocks[i].getNumberContainer() > containers.size())
-                containers.add(0);
-        }
-
         remove();
-        //создание контейнеров
-        for (int i = 0; i < blocks.length; i++) {
-            while (blocks[i].getNumberContainer() > containers.size())
-                containers.add(0);
-        }
     }
 
     private void blockPlacement() {
         int numberCont = 1, numberBlock, count = 0;
         numberBlock = random.nextInt(blocks.length); //взять случайный блок
-        containers.add(0);
         while (count < blocks.length) { //пока все блоки не будут размещены
             if (blocks[numberBlock].getNumberContainer() != 0) { //если блок уже размещен
                 numberBlock = random.nextInt(blocks.length); //взять другой блок
@@ -76,7 +55,6 @@ public class Pack {
 
                 if (random.nextInt(2) == 0) { //создать новый контейнер шанс 1 к 2
                     numberCont++;
-                    containers.add(0);
                 }
             }
         }
@@ -85,7 +63,7 @@ public class Pack {
     private void remove() {
         int k;
         boolean flag;
-        for (int p = 1; p <= containers.size(); p++) {
+        for (int p = 1; p <= fitness(); p++) {
             flag = true;
             for (int i = 0; i < blocks.length; i++)
                 if (blocks[i].getNumberContainer() == p)
@@ -94,7 +72,6 @@ public class Pack {
                 for (int t = 0; t < blocks.length; t++)
                     if ((k = blocks[t].getNumberContainer()) > p)
                         blocks[t].setNumberContainer(k - 1);
-                containers.remove(p - 1);
                 p--;
             }
         }
@@ -108,8 +85,7 @@ public class Pack {
                 if (!Container.passedTheTest(blocks, blocks[i].getNumberContainer(), width, height)) { //проверка наложение блоков друг на друга
                     switch (random.nextInt(3)) {
                         case 0: { //переместить в новый контейнер
-                            containers.add(0);
-                            blocks[i].setNumberContainer(containers.size() + 1);
+                            blocks[i].setNumberContainer(fitness() + 1);
                             blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
                             blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
                             flag = true;
@@ -117,7 +93,7 @@ public class Pack {
                             break;
                         }
                         case 1: { //переместить в другой контейнер
-                            blocks[i].setNumberContainer(random.nextInt(containers.size()) + 1);
+                            blocks[i].setNumberContainer(random.nextInt(fitness()) + 1);
                             blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
                             blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
 
@@ -137,17 +113,6 @@ public class Pack {
                     }
                 }
         }
-    }
-
-    void print() {
-        for (int i = 1; i <= containers.size(); i++) {
-            System.out.println(i + " Контейнер");
-            Container.print(blocks, i, width, height);
-        }
-        System.out.println("\n\n");
-        for (Block block : blocks)
-            System.out.println(block.getNumber() + " " + block.getNumberContainer());
-        System.out.println("\n" + containers.size());
     }
 
     int fitness() {
@@ -181,22 +146,20 @@ public class Pack {
 
     void mutation() {
         for (int r = 0; r < blocks.length; r++) {
-            blocks[r].setNumberContainer(random.nextInt(containers.size()) + 1);
+            blocks[r].setNumberContainer(random.nextInt(fitness()) + 1);
             blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
             blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
         }
     }
 
     int write() {
-        int[][] size;
         try {
             FileWriter fw = new FileWriter("result.txt");
-            for (int i = 1; i <= containers.size(); i++) {
-                fw.write(i + " Контейнер\n\n");
-                size = Container.print(blocks, i, width, height);
-                for (int[] w : size) {
-                    for (int h : w)
-                        fw.write(h + "\t");
+            for (int i = 1; i <= fitness(); i++) {
+                fw.write(i + " Контейнер\n");
+                for (int[] coord : Container.write(blocks, i, width, height)) {
+                    for (int c : coord)
+                        fw.write("\t" + c);
                     fw.write("\n");
                 }
                 fw.write("\n\n");

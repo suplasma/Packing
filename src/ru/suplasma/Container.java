@@ -17,7 +17,7 @@ public class Container {
         return true;
     }
 
-    static int[][] print(Block[] blocks, int number, int width, int height) {
+    static int[][] write(Block[] blocks, int number, int width, int height) {
         int[][] size = new int[width][height];
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i].getNumberContainer() == number) {
@@ -28,6 +28,13 @@ public class Container {
             }
         }
 
-       return size;
+        return size;
+    }
+
+    static boolean isEmpty(Block[] blocks, int number) {
+        for (Block block : blocks)
+            if (block.getNumberContainer() == number)
+                return false;
+        return true;
     }
 }

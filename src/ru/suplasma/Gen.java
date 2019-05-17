@@ -14,15 +14,10 @@ public class Gen {
             packs[i] = new Pack(sizeBlock, width, height, null);
 
         for (int k = 0; k < populations; k++) {
-            System.out.println("--------------------------" + (k + 1) + " популяция-------------------------");
-
             for (int i = 0; i < min.length; i++)
                 min[i] = Integer.MAX_VALUE;
 
             for (int i = 0; i < packs.length; i++) {
-                System.out.println((i + 1) + " ген");
-
-                System.out.println("Fitness: " + packs[i].fitness() + "\n");
                 for (int t = 0; t < min.length; t++)
                     if (min[t] > packs[i].fitness()) {
                         for (int j = min.length - 1; j > t; j--) {
@@ -40,12 +35,8 @@ public class Gen {
                             gene[p][t] = packs[i].get()[p][t];
                         }
                     }
-                    packs[i].write();
                 }
             }
-
-
-            System.out.println("Min fitness: " + min[0]);
 
             for (int i = 0; i < packs.length; i++) {
                 packs[i].cross(packs, 0);
@@ -54,5 +45,6 @@ public class Gen {
                 packs[i] = new Pack(sizeBlock, width, height, genome);
             }
         }
+        new Pack(sizeBlock,width,height,gene).write();
     }
 }
