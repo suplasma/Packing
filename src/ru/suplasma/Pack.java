@@ -1,12 +1,10 @@
 package ru.suplasma;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Pack {
     private LinkedList<Integer> containers;
@@ -41,8 +39,6 @@ public class Pack {
     }
 
     private void start() {
-
-
         //создание контейнеров
         for (int i = 0; i < blocks.length; i++) {
             while (blocks[i].getNumberContainer() > containers.size())
@@ -62,15 +58,6 @@ public class Pack {
             while (blocks[i].getNumberContainer() > containers.size())
                 containers.add(0);
         }
-//        if (containers.size() < 37)
-//            print();
-        int max = 0;
-        for (int i = 0; i < blocks.length; i++)
-            if (blocks[i].getNumberContainer() > max)
-                max = blocks[i].getNumberContainer();
-        if (max != containers.size())
-            System.out.println(1 / 0);
-
     }
 
     private void blockPlacement() {
@@ -93,10 +80,6 @@ public class Pack {
                 }
             }
         }
-        if (numberCont != containers.size()) {
-            System.out.println(numberCont + " " + containers.size());
-            System.out.println(1 / 0);
-        }
     }
 
     private void remove() {
@@ -115,18 +98,13 @@ public class Pack {
                 p--;
             }
         }
-        for (int p = 1; p <= containers.size(); p++)
-            if (Container.isEmpty(blocks, p))
-                System.out.println(1 / 0);
     }
 
     private void check() {
         boolean flag = true;
         while (flag) {
             flag = false;
-            //for (int i = 1; i <= containers.size(); i++)
-            //if (!Container.passedTheTest(blocks, i, width, height)){ //проверка наложение блоков друг на друга
-            for (int i = 0; i < blocks.length; i++) //если да ищем контейнер
+            for (int i = 0; i < blocks.length; i++)
                 if (!Container.passedTheTest(blocks, blocks[i].getNumberContainer(), width, height)) { //проверка наложение блоков друг на друга
                     switch (random.nextInt(3)) {
                         case 0: { //переместить в новый контейнер
@@ -139,8 +117,6 @@ public class Pack {
                             break;
                         }
                         case 1: { //переместить в другой контейнер
-                            if (containers.size() == 0)
-                                System.out.println(1 / 0);
                             blocks[i].setNumberContainer(random.nextInt(containers.size()) + 1);
                             blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
                             blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
@@ -161,13 +137,6 @@ public class Pack {
                     }
                 }
         }
-        for (int i = 1; i <= containers.size(); i++)
-            if (!Container.passedTheTest(blocks, i, width, height)) //проверка наложение блоков друг на друга
-                System.out.println(1 / 0);
-//        for (int i = 0; i < blocks.length; i++)
-//            for (int j = 0; j < blocks.length; j++)
-//                if (i != j && blocks[i].getNumberContainer() == blocks[j].getNumberContainer() && !blocks[i].check(blocks[j]))
-//                    System.out.println("Block #" + blocks[i].getNumberContainer());
     }
 
     void print() {
@@ -186,10 +155,6 @@ public class Pack {
         for (int i = 0; i < blocks.length; i++)
             if (blocks[i].getNumberContainer() > max)
                 max = blocks[i].getNumberContainer();
-//        while (max > containers.size())
-//            containers.add(0);
-//        while (max < containers.size())
-//            remove();
         return max;
     }
 
@@ -223,12 +188,21 @@ public class Pack {
     }
 
     int write() {
+        int[][] size;
         try {
-            FileWriter fw = new FileWriter("weights.txt");
-            for (int j = 0; j < blocks.length; j++)
-                fw.write(blocks[j].getNumber() + " " + blocks[j].getNumberContainer() + "\n");
+            FileWriter fw = new FileWriter("result.txt");
+            for (int i = 1; i <= containers.size(); i++) {
+                fw.write(i + " Контейнер\n\n");
+                size = Container.print(blocks, i, width, height);
+                for (int[] w : size) {
+                    for (int h : w)
+                        fw.write(h + "\t");
+                    fw.write("\n");
+                }
+                fw.write("\n\n");
+            }
 
-            File file = new File("weights.txt");
+            File file = new File("result.txt");
             if (!file.exists()) {
                 System.out.println("Ошибка создания файла");
                 return 1;
@@ -236,26 +210,6 @@ public class Pack {
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return 2;
-        }
-        return 0;
-    }
-
-    private int readWeights() {
-        try {
-            File file = new File("weights.txt");
-            if (!file.exists()) {
-                System.out.println("Ошибка, файла не существует");
-                return 1;
-            }
-
-            FileReader fr = new FileReader("weights.txt");
-            Scanner scan = new Scanner(fr);
-//            for (int j = 0; j < W.size(); j++)
-//                for (int i = 0; i < W.get(j).length; i++)
-//                    W.get(j)[i][0] = Double.parseDouble(scan.nextLine());
-            fr.close();
-        } catch (Exception e) {
             return 2;
         }
         return 0;

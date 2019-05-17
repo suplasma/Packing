@@ -10,40 +10,60 @@ public class Main {
 
         int width, height;
 
-        System.out.println("Ширина контейнера: ");
-        //width = scanner.nextInt();
-        width = 15;
-        System.out.println("Высота контейнера: ");
-        // height = scanner.nextInt();
-        height = 15;
+        do {
+            System.out.println("Ширина контейнера: ");
+            width= scanner.nextInt();
+        } while (width <= 0);
 
-        System.out.println("Количество блоков: ");
-        //n = scanner.nextInt();
-        n = 50;
+        do {
+            System.out.println("Высота контейнера: ");
+            height = scanner.nextInt();
+        } while (height <= 0);
+
+        do {
+            System.out.println("Количество блоков: ");
+            n = scanner.nextInt();
+        } while (n <= 0);
+
+
 
         int[][] sizeBlock = new int[n][2];
 
         while (i < n) {
             do {
                 System.out.println("Ширина блока " + (i + 1) + ":");
-                //a = scanner.nextInt();
-                a = 7;
+                a = scanner.nextInt();
             } while (a <= 0 || a > width);
 
             sizeBlock[i][0] = a;
 
             do {
                 System.out.println("Высота блока " + (i + 1) + ":");
-                //a = scanner.nextInt();
-                a = 6;
+                a = scanner.nextInt();
             } while (a <= 0 || a > height);
 
             sizeBlock[i++][1] = a;
         }
+        int numberOfGenes, remainingAmount, populations;
+
+        do {
+            System.out.println("Количество особей: ");
+            numberOfGenes = scanner.nextInt();
+        } while (numberOfGenes <= 0);
+
+        do {
+            System.out.println("Отобрать особей: ");
+            remainingAmount = scanner.nextInt();
+        } while (remainingAmount <= 0 || remainingAmount > numberOfGenes);
+
+        do {
+            System.out.println("Популяций: ");
+            populations = scanner.nextInt();
+        } while (populations <= 0);
 
 
         scanner.close();
 
-        new Gen(sizeBlock, width, height, 10, 5, 1000);
+        new Gen(sizeBlock, width, height, numberOfGenes, remainingAmount, populations);
     }
 }
