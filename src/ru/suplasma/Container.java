@@ -9,8 +9,13 @@ public class Container {
                 for (int w = 0; w < blocks[i].getWidth(); w++)
                     for (int h = 0; h < blocks[i].getHeight(); h++)
                         for (int l = 0; l < blocks[i].getLength(); l++) {
-                            if (size[w + blocks[i].getX()][h + blocks[i].getY()][l + blocks[i].getZ()])
+                            try {
+                                if (size[w + blocks[i].getX()][h + blocks[i].getY()][l + blocks[i].getZ()])
+                                    return false;
+                            } catch (ArrayIndexOutOfBoundsException e) {
                                 return false;
+                            }
+
                             size[w + blocks[i].getX()][h + blocks[i].getY()][l + blocks[i].getZ()] = true;
                         }
             }

@@ -15,25 +15,31 @@ public class Block {
         this.length = size[2];
     }
 
-    public void turn(int c) {
+    public void turn(int c, int w, int h, int l) {
         switch (c) {
             case 0: {
-                width = width + height;
-                height = width - height;
-                width = width - height;
+                if (width < w && height < h) {
+                    width = width + height;
+                    height = width - height;
+                    width = width - height;
+                }
                 break;
             }
             case 1: {
-                width = width + length;
-                length = width - length;
-                width = width - length;
-                break;
+                if (width < w && length < l) {
+                    width = width + length;
+                    length = width - length;
+                    width = width - length;
+                    break;
+                }
             }
             case 2: {
-                length = length + height;
-                height = length - height;
-                length = length - height;
-                break;
+                if (length < l && height < h) {
+                    length = length + height;
+                    height = length - height;
+                    length = length - height;
+                    break;
+                }
             }
         }
     }

@@ -93,6 +93,7 @@ public class Pack {
                             blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
                             blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
                             blocks[i].setZ(random.nextInt(length - blocks[i].getLength() + 1));
+
                             flag = true;
 
                             break;
@@ -102,6 +103,7 @@ public class Pack {
                             blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
                             blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
                             blocks[i].setZ(random.nextInt(length - blocks[i].getLength() + 1));
+
                             flag = true;
 
 
@@ -117,7 +119,9 @@ public class Pack {
                             break;
                         }
                         case 3: {
-                            blocks[i].turn(random.nextInt(3));
+                            blocks[i].turn(random.nextInt(3), width, height, length);
+
+                            flag = true;
 
                             break;
                         }
@@ -163,7 +167,7 @@ public class Pack {
                 blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
                 blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
                 blocks[r].setZ(random.nextInt(length - blocks[r].getLength() + 1));
-                blocks[r].turn(random.nextInt(4));
+                blocks[r].turn(random.nextInt(4), width, height, length);
             }
         }
     }
