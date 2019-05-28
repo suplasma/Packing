@@ -2,16 +2,16 @@ package ru.suplasma;
 
 public class Gen {
 
-    Gen(int[][] sizeBlock, int width, int height, int numberOfGenes, int remainingAmount, int populations) {
+    Gen(int[][] sizeBlock, int width, int height, int length, int numberOfGenes, int remainingAmount, int populations) {
         Pack[] packs = new Pack[numberOfGenes];
         int[][] genome;
         int fitness = Integer.MAX_VALUE;
-        int[][] gene = new int[sizeBlock.length][3];
+        int[][] gene = new int[sizeBlock.length][4];
         int min[] = new int[remainingAmount];
         int mini[] = new int[min.length];
 
         for (int i = 0; i < packs.length; i++)
-            packs[i] = new Pack(sizeBlock, width, height, null);
+            packs[i] = new Pack(sizeBlock, width, height, length, null);
 
         for (int k = 0; k < populations; k++) {
             for (int i = 0; i < min.length; i++)
@@ -31,7 +31,7 @@ public class Gen {
                 if (fitness > packs[i].fitness()) {
                     fitness = packs[i].fitness();
                     for (int p = 0; p < packs[i].get().length; p++) {
-                        for (int t = 0; t < 3; t++) {
+                        for (int t = 0; t < 4; t++) {
                             gene[p][t] = packs[i].get()[p][t];
                         }
                     }
@@ -42,9 +42,9 @@ public class Gen {
                 packs[i].cross(packs, 0);
                 packs[i].mutation();
                 genome = packs[i].get();
-                packs[i] = new Pack(sizeBlock, width, height, genome);
+                packs[i] = new Pack(sizeBlock, width, height, length, genome);
             }
         }
-        new Pack(sizeBlock,width,height,gene).write();
+        new Pack(sizeBlock, width, height, length, gene).write();
     }
 }
