@@ -19,7 +19,7 @@ public class Pack {
         random = new Random();
         blocks = new Block[sizeBlock.length];
         for (int i = 0; i < sizeBlock.length; i++)
-            blocks[i] = new Block(sizeBlock[i], i + 1);
+            blocks[i] = new Block(sizeBlock[i]);
         if (genome == null) {
 
 
@@ -146,9 +146,11 @@ public class Pack {
 
     void mutation() {
         for (int r = 0; r < blocks.length; r++) {
-            blocks[r].setNumberContainer(random.nextInt(fitness()) + 1);
-            blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
-            blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
+            if (random.nextInt(10) == 0) {
+                blocks[r].setNumberContainer(random.nextInt(fitness()) + 1);
+                blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
+                blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
+            }
         }
     }
 

@@ -23,18 +23,11 @@ public class Container {
             if (blocks[i].getNumberContainer() == number) {
                 for (int w = 0; w < blocks[i].getWidth(); w++)
                     for (int h = 0; h < blocks[i].getHeight(); h++) {
-                        size[w + blocks[i].getX()][h + blocks[i].getY()] = blocks[i].getNumber();
+                        size[w + blocks[i].getX()][h + blocks[i].getY()] = i + 1;
                     }
             }
         }
 
         return size;
-    }
-
-    static boolean isEmpty(Block[] blocks, int number) {
-        for (Block block : blocks)
-            if (block.getNumberContainer() == number)
-                return false;
-        return true;
     }
 }

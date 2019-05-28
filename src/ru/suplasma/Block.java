@@ -6,12 +6,10 @@ public class Block {
     private int numberContainer;
     private int x;
     private int y;
-    private int number;
 
-    Block(int[] size, int number) {
+    Block(int[] size) {
         this.width = size[0];
         this.height = size[1];
-        this.number = number;
     }
 
     public void setNumberContainer(int numberContainer) {
@@ -44,9 +42,5 @@ public class Block {
 
     public int getY() {
         return y;
-    }
-
-    public int getNumber() {
-        return number;
     }
 }
