@@ -142,7 +142,7 @@ public class Main {
                 if (a <= 0) {
                     flag = true;
                     System.out.println("Длина блока должна быть больше нуля, введите еще раз");
-                } else if (a > height) {
+                } else if (a > length) {
                     flag = true;
                     System.out.println("Длина блока не может быть больше длины контейнера (" + length + "), введите еще раз");
                 } else
