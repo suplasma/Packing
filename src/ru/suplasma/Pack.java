@@ -13,7 +13,7 @@ public class Pack {
 
     private Random random;
 
-    Pack(int[][] sizeBlock, int width, int height, int length, int[][] genome) {
+    Pack(int[][] sizeBlock, int width, int height, int length) {
         this.width = width;
         this.height = height;
         this.length = length;
@@ -22,23 +22,11 @@ public class Pack {
         blocks = new Block[sizeBlock.length];
         for (int i = 0; i < sizeBlock.length; i++)
             blocks[i] = new Block(sizeBlock[i]);
-        if (genome == null) {
 
-
-            blockPlacement(); //размещение блоков
-
-        } else
-            for (int i = 0; i < blocks.length; i++) {
-                blocks[i].setNumberContainer(genome[i][0]);
-                blocks[i].setX(genome[i][1]);
-                blocks[i].setY(genome[i][2]);
-                blocks[i].setZ(genome[i][3]);
-            }
-
-        start();
+        blockPlacement(); //размещение блоков
     }
 
-    private void start() {
+    void start() {
         check(); //проверка контейнеров
         remove();
     }
@@ -69,13 +57,13 @@ public class Pack {
         boolean flag;
         for (int p = 1; p <= fitness(); p++) {
             flag = true;
-            for (int i = 0; i < blocks.length; i++)
-                if (blocks[i].getNumberContainer() == p)
+            for (Block block : blocks)
+                if (block.getNumberContainer() == p)
                     flag = false;
             if (flag) {
-                for (int t = 0; t < blocks.length; t++)
-                    if ((k = blocks[t].getNumberContainer()) > p)
-                        blocks[t].setNumberContainer(k - 1);
+                for (Block block : blocks)
+                    if ((k = block.getNumberContainer()) > p)
+                        block.setNumberContainer(k - 1);
                 p--;
             }
         }
@@ -85,24 +73,26 @@ public class Pack {
         boolean flag = true;
         while (flag) {
             flag = false;
-            for (int i = 0; i < blocks.length; i++)
-                if (!Container.passedTheTest(blocks, blocks[i].getNumberContainer(), width, height, length)) { //проверка наложение блоков друг на друга
+            for (Block block : blocks)
+                if (!Container.passedTheTest(blocks, block.getNumberContainer(), width, height, length)) { //проверка наложение блоков друг на друга
                     switch (random.nextInt(4)) {
                         case 0: { //переместить в новый контейнер
-                            blocks[i].setNumberContainer(fitness() + 1);
-                            blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
-                            blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
-                            blocks[i].setZ(random.nextInt(length - blocks[i].getLength() + 1));
+                            block.setNumberContainer(fitness() + 1);
+                            block.setX(random.nextInt(width - block.getWidth() + 1));
+                            block.setY(random.nextInt(height - block.getHeight() + 1));
+                            block.setZ(random.nextInt(length - block.getLength() + 1));
+                            block.turn(random.nextInt(4), width, height, length);
 
                             flag = true;
 
                             break;
                         }
                         case 1: { //переместить в другой контейнер
-                            blocks[i].setNumberContainer(random.nextInt(fitness()) + 1);
-                            blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
-                            blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
-                            blocks[i].setZ(random.nextInt(length - blocks[i].getLength() + 1));
+                            block.setNumberContainer(random.nextInt(fitness()) + 1);
+                            block.setX(random.nextInt(width - block.getWidth() + 1));
+                            block.setY(random.nextInt(height - block.getHeight() + 1));
+                            block.setZ(random.nextInt(length - block.getLength() + 1));
+                            block.turn(random.nextInt(4), width, height, length);
 
                             flag = true;
 
@@ -110,16 +100,17 @@ public class Pack {
                             break;
                         }
                         case 2: {//передвинуть
-                            blocks[i].setX(random.nextInt(width - blocks[i].getWidth() + 1));
-                            blocks[i].setY(random.nextInt(height - blocks[i].getHeight() + 1));
-                            blocks[i].setZ(random.nextInt(length - blocks[i].getLength() + 1));
+                            block.setX(random.nextInt(width - block.getWidth() + 1));
+                            block.setY(random.nextInt(height - block.getHeight() + 1));
+                            block.setZ(random.nextInt(length - block.getLength() + 1));
+                            block.turn(random.nextInt(4), width, height, length);
 
                             flag = true;
 
                             break;
                         }
-                        case 3: {
-                            blocks[i].turn(random.nextInt(3), width, height, length);
+                        case 3: {//повернуть
+                            block.turn(random.nextInt(3), width, height, length);
 
                             flag = true;
 
@@ -132,13 +123,13 @@ public class Pack {
 
     int fitness() {
         int max = 0;
-        for (int i = 0; i < blocks.length; i++)
-            if (blocks[i].getNumberContainer() > max)
-                max = blocks[i].getNumberContainer();
+        for (Block block : blocks)
+            if (block.getNumberContainer() > max)
+                max = block.getNumberContainer();
         return max;
     }
 
-    int[][] get() {
+    private int[][] get() {
         int[][] gen = new int[blocks.length][4];
         for (int i = 0; i < blocks.length; i++) {
             gen[i][0] = blocks[i].getNumberContainer();
@@ -149,36 +140,43 @@ public class Pack {
         return gen;
     }
 
-    void cross(Pack[] packs, int n) {
-        int r = random.nextInt(packs.length - n);
-        int r1 = random.nextInt(packs.length - n);
-
+    void cross(Pack[] packs, int[] mini, int n) {
+        int[][] genome1 = packs[mini[random.nextInt(n)]].get();
+        int[][] genome2 = packs[mini[random.nextInt(n)]].get();
         for (int i = 0; i < blocks.length; i++)
-            if (random.nextInt(2) == 0)
-                blocks[i] = packs[r].blocks[i];
-            else
-                blocks[i] = packs[r1].blocks[i];
+            if (random.nextInt(2) == 0) {
+                blocks[i].setNumberContainer(genome1[i][0]);
+                blocks[i].setX(genome1[i][1]);
+                blocks[i].setY(genome1[i][2]);
+                blocks[i].setZ(genome1[i][3]);
+            } else {
+                blocks[i].setNumberContainer(genome2[i][0]);
+                blocks[i].setX(genome2[i][1]);
+                blocks[i].setY(genome2[i][2]);
+                blocks[i].setZ(genome2[i][3]);
+            }
     }
 
+
     void mutation() {
-        for (int r = 0; r < blocks.length; r++) {
+        for (Block block : blocks) {
             if (random.nextInt(10) == 0) {
-                blocks[r].setNumberContainer(random.nextInt(fitness()) + 1);
-                blocks[r].setX(random.nextInt(width - blocks[r].getWidth() + 1));
-                blocks[r].setY(random.nextInt(height - blocks[r].getHeight() + 1));
-                blocks[r].setZ(random.nextInt(length - blocks[r].getLength() + 1));
-                blocks[r].turn(random.nextInt(4), width, height, length);
+                block.setNumberContainer(random.nextInt(fitness()) + 1);
+                block.setX(random.nextInt(width - block.getWidth() + 1));
+                block.setY(random.nextInt(height - block.getHeight() + 1));
+                block.setZ(random.nextInt(length - block.getLength() + 1));
+                block.turn(random.nextInt(4), width, height, length);
             }
         }
     }
 
-    int write() {
+    void write() {
         try {
             FileWriter fw = new FileWriter("result.txt");
             for (int i = 1; i <= fitness(); i++) {
                 fw.write(i + " Контейнер\n");
-                for (int[][] coord : Container.write(blocks, i, width, height, length)) {
-                    for (int[] cr : coord) {
+                for (int[][] coordinates : Container.write(blocks, i, width, height, length)) {
+                    for (int[] cr : coordinates) {
                         for (int c : cr)
                             fw.write("\t" + c);
                         fw.write("\t");
@@ -191,13 +189,11 @@ public class Pack {
             File file = new File("result.txt");
             if (!file.exists()) {
                 System.out.println("Ошибка создания файла");
-                return 1;
+                return;
             }
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return 2;
         }
-        return 0;
     }
 }

@@ -1,17 +1,17 @@
 package ru.suplasma;
 
-public class Gen {
+class Gen {
 
     Gen(int[][] sizeBlock, int width, int height, int length, int numberOfGenes, int remainingAmount, int populations) {
         Pack[] packs = new Pack[numberOfGenes];
-        int[][] genome;
         int fitness = Integer.MAX_VALUE;
-        int[][] gene = new int[sizeBlock.length][4];
         int min[] = new int[remainingAmount];
-        int mini[] = new int[min.length];
+        int mini[] = new int[remainingAmount];
 
-        for (int i = 0; i < packs.length; i++)
-            packs[i] = new Pack(sizeBlock, width, height, length, null);
+        for (int i = 0; i < packs.length; i++) {
+            packs[i] = new Pack(sizeBlock, width, height, length);
+            packs[i].start();
+        }
 
         for (int k = 0; k < populations; k++) {
             for (int i = 0; i < min.length; i++)
@@ -30,21 +30,29 @@ public class Gen {
                     }
                 if (fitness > packs[i].fitness()) {
                     fitness = packs[i].fitness();
-                    for (int p = 0; p < packs[i].get().length; p++) {
-                        for (int t = 0; t < 4; t++) {
-                            gene[p][t] = packs[i].get()[p][t];
-                        }
-                    }
+                    packs[i].write();
                 }
             }
 
-            for (int i = 0; i < packs.length; i++) {
-                packs[i].cross(packs, 0);
-                packs[i].mutation();
-                genome = packs[i].get();
-                packs[i] = new Pack(sizeBlock, width, height, length, genome);
+            int[] maxi = new int[numberOfGenes - remainingAmount];
+            int t = 0;
+            boolean flag;
+            for (int i = 0; i < numberOfGenes; i++) {
+                flag = true;
+                for (int j = 0; j < remainingAmount; j++)
+                    if (mini[j] == i)
+                        flag = false;
+
+                if (flag)
+                    maxi[t++] = i;
+            }
+
+            for (int i = 0; i < (numberOfGenes - remainingAmount); i++) {
+                packs[maxi[i]].cross(packs, mini, numberOfGenes - remainingAmount);
+                packs[maxi[i]].mutation();
+                packs[maxi[i]].start();
             }
         }
-        new Pack(sizeBlock, width, height, length, gene).write();
+        System.out.println("Успешное завершение\nРезультат: " + fitness);
     }
 }
