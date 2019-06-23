@@ -2,8 +2,8 @@ package ru.suplasma;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Pack {
     private Block[] blocks;
@@ -29,7 +29,25 @@ public class Pack {
     void start() {
         check(); //проверка контейнеров
         remove();
+        gravity();
     }
+
+    private void gravity() {
+        boolean flag = true;
+        while (flag)
+            for (Block block : blocks) {
+                flag = false;
+                do {
+                    block.setY(block.getY() - 1);
+                    if (Container.passedTheTest(blocks, block.getNumberContainer(), width, height, length))
+                        flag = true;
+                    else
+                        break;
+                } while (true);
+                block.setY(block.getY() + 1);
+            }
+    }
+
 
     private void blockPlacement() {
         int numberCont = 1, numberBlock, count = 0;
@@ -188,12 +206,24 @@ public class Pack {
 
             File file = new File("result.txt");
             if (!file.exists()) {
-                System.out.println("Ошибка создания файла");
+                System.out.println("Ошибка создания файла result.txt");
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                System.exit(0);
                 return;
             }
             fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Ошибка записи файла result.txt");
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            System.exit(0);
         }
     }
 }
