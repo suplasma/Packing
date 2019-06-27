@@ -18,7 +18,7 @@ public class Block {
     public void turn(int c, int w, int h, int l) {
         switch (c) {
             case 0: {
-                if (width < w && height < h) {
+                if (width <= h && height <= w) {
                     width = width + height;
                     height = width - height;
                     width = width - height;
@@ -26,7 +26,7 @@ public class Block {
                 break;
             }
             case 1: {
-                if (width < w && length < l) {
+                if (width <= l && length <= w) {
                     width = width + length;
                     length = width - length;
                     width = width - length;
@@ -34,7 +34,7 @@ public class Block {
                 }
             }
             case 2: {
-                if (length < l && height < h) {
+                if (length <= h && height <= l) {
                     length = length + height;
                     height = length - height;
                     length = length - height;
