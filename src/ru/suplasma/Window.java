@@ -23,10 +23,22 @@ public class Window extends JFrame {
         setBounds(0, 0, 800, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-        Random random = new Random(Integer.MAX_VALUE);
-        colorBlocks = new Color[numberBlocks + 1];
+        Random random = new Random(5);
+        colorBlocks = new Color[Math.max(numberBlocks + 1, 13)];
         colorBlocks[0] = Color.WHITE;
-        for (int i = 1; i <= numberBlocks; i++)
+        colorBlocks[1] = Color.BLACK;
+        colorBlocks[2] = Color.GRAY;
+        colorBlocks[3] = Color.BLUE;
+        colorBlocks[4] = Color.CYAN;
+        colorBlocks[5] = Color.DARK_GRAY;
+        colorBlocks[6] = Color.GREEN;
+        colorBlocks[7] = Color.LIGHT_GRAY;
+        colorBlocks[8] = Color.MAGENTA;
+        colorBlocks[9] = Color.ORANGE;
+        colorBlocks[10] = Color.PINK;
+        colorBlocks[11] = Color.RED;
+        colorBlocks[12] = Color.YELLOW;
+        for (int i = 13; i <= numberBlocks; i++)
             colorBlocks[i] = new Color(random.nextInt());
         list = new LinkedList<>();
         containerNumber = 0;
@@ -64,9 +76,14 @@ public class Window extends JFrame {
         if (depth >= list.get(0)[0].length)
             depth = list.get(0)[0].length - 1;
 
+        LinkedList<Integer> integerList = new LinkedList<>();
+        integerList.add(0);
+
         for (int i = 0; i < list.get(containerNumber).length; i++)
             for (int t = 0; t < list.get(containerNumber)[0][0].length; t++) {
-                d.setColor(colorBlocks[list.get(containerNumber)[i][depth][t]]);
+                if(!integerList.contains(list.get(containerNumber)[i][depth][t]))
+                    integerList.add(list.get(containerNumber)[i][depth][t]);
+                d.setColor(colorBlocks[integerList.indexOf(list.get(containerNumber)[i][depth][t])]);
                 d.fillRect(startX + size * t + 1, startY + size * i + 1, size - 2, size - 2);
             }
 
