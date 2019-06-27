@@ -34,9 +34,18 @@ public class Pack {
 
     private void gravity() {
         boolean flag = true;
-        while (flag)
+        while (flag) {
+            flag = false;
             for (Block block : blocks) {
-                flag = false;
+                do {
+                    block.setX(block.getX() - 1);
+                    if (Container.passedTheTest(blocks, block.getNumberContainer(), width, height, length))
+                        flag = true;
+                    else
+                        break;
+                } while (true);
+                block.setX(block.getX() + 1);
+            }for (Block block : blocks) {
                 do {
                     block.setY(block.getY() - 1);
                     if (Container.passedTheTest(blocks, block.getNumberContainer(), width, height, length))
@@ -45,7 +54,17 @@ public class Pack {
                         break;
                 } while (true);
                 block.setY(block.getY() + 1);
+            }for (Block block : blocks) {
+                do {
+                    block.setZ(block.getZ() - 1);
+                    if (Container.passedTheTest(blocks, block.getNumberContainer(), width, height, length))
+                        flag = true;
+                    else
+                        break;
+                } while (true);
+                block.setZ(block.getZ() + 1);
             }
+        }
     }
 
 
